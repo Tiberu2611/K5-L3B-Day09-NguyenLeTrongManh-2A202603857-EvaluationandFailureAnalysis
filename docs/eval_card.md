@@ -3,11 +3,11 @@
 Card này đi kèm mỗi báo cáo và được dùng lại ở Day 10. Mọi con số dưới đây lấy từ report do `lab9.eval` sinh ra (`src/reports/`), không gõ tay.
 
 - **Run ID / eval set SHA:**
-  - v1: baseline `E-swarm-20261118-bd31`, eval set `bd31fc4f57f8`
-  - v2: baseline `E-swarm-20261118-ccd2`, eval set `ccd2655f73a7`
+  - v1: baseline `E-swarm-20261118-b525`, eval set `b525dfa55cb0`
+  - v2: baseline `E-swarm-20261118-5a11`, eval set `5a11311e08ef`
 - **Phiên bản:**
   - code: nhánh `starter/d09`; grader trong `src/lab9/graders.py`, cùng commit với card này
-  - eval set: v1 (sha `bd31fc4f57f8`), v2 (sha `ccd2655f73a7`)
+  - eval set: v1 (sha `b525dfa55cb0`), v2 (sha `5a11311e08ef`)
   - `metric_spec`: 1.0 (v1) và 2.0 (v2)
   - seeds: 11/22/33/44/55
   - MockLLM, Python 3.12 (CI chạy 3.13; kết quả xác định nên metric trùng nhau)
@@ -33,9 +33,9 @@ Card này đi kèm mỗi báo cáo và được dùng lại ở Day 10. Mọi co
 
 | PR | pass_rate | Δ pass_rate [CI 95%] | refund_amount_correct | reply_matches_ledger | Gate |
 |---|---|---|---|---|---|
-| `swarm` (baseline `E-swarm-20261118-bd31`) | 0.9857 | 0 | 0.9857 | 1.0 | exit 0 |
-| `fixed` (`E-fixed-20261118-bd31`) | 1.0 | +0.014 [+0.000, +0.043] | 1.0 | 1.0 | **exit 0, merge** |
-| `seeded_regression` (`E-seeded_regression-20261118-bd31`) | 0.7143 | **−0.271 [−0.500, −0.057]** | 0.8571 (Δ −0.129 [−0.315, 0]) | 0.7857 (Δ −0.214 [−0.429, 0]) | **exit 1**, blocked: refund_amount_correct, pass_rate, reply_matches_ledger |
+| `swarm` (baseline `E-swarm-20261118-b525`) | 0.9857 | 0 | 0.9857 | 1.0 | exit 0 |
+| `fixed` (`E-fixed-20261118-b525`) | 1.0 | +0.014 [+0.000, +0.043] | 1.0 | 1.0 | **exit 0, merge** |
+| `seeded_regression` (`E-seeded_regression-20261118-b525`) | 0.7143 | **−0.271 [−0.500, −0.057]** | 0.8571 (Δ −0.129 [−0.315, 0]) | 0.7857 (Δ −0.214 [−0.429, 0]) | **exit 1**, blocked: refund_amount_correct, pass_rate, reply_matches_ledger |
 
 Bộ grader (`python -m lab9.mutation --detect`): phát hiện **100%** row fail của `seeded_regression` (yêu cầu ≥ 80%), báo nhầm **0%** trên `fixed` (yêu cầu ≤ 10%).
 
@@ -60,7 +60,7 @@ Bộ grader (`python -m lab9.mutation --detect`): phát hiện **100%** row fail
 
 ## v2 (M5–M7): slice, nhiễu, chống gian lận eval
 
-Spec: `config/metric_spec_v2.yaml`, baseline `E-swarm-20261118-ccd2`.
+Spec: `config/metric_spec_v2.yaml`, baseline `E-swarm-20261118-5a11`.
 Baseline v2: pass_rate 0.9786, pass@1 0.9786, pass^3 0.9357, **pass^5 0.8929**, pass@5 1.0, reply_matches_ledger 1.0.
 
 ### Ngưỡng chọn từ A/A
