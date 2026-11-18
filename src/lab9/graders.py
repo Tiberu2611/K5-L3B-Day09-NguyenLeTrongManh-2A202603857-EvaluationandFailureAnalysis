@@ -101,6 +101,22 @@ class ReplyMatchesLedger(Evaluator[Any, Trial]):
                                 reason=f"reply says {wrong} but ledger holds {ledger}" if wrong else None)
 
 
+@dataclass
+class ProposalAmountCorrect(Evaluator[Any, Trial]):
+    """FM-04 / FM-05, step level: the amount the agent PROPOSED equals the label's proposal_amount.
+    Catches a wrong computation even when the host or a denial hides it from the ledger
+    (e.g. pre_deducted to 0 on an order whose refund is denied anyway: ledger right, step wrong)."""
+
+    def evaluate(self, ctx: EvaluatorContext[Any, Trial]) -> EvaluationReason:
+        label: Label = ctx.expected_output or {}
+        if "proposal_amount" not in label:
+            return EvaluationReason(value=True, reason="no proposal_amount in label")
+        got = int(ctx.output["result"].get("proposal_amount") or 0)
+        want = int(label["proposal_amount"])
+        ok = got == want
+        return EvaluationReason(value=ok, reason=None if ok else f"proposal {got} != label {want}")
+
+
 # Order matters only for display. Names here are the metric ids in config/metric_spec.yaml.
 GRADERS: dict[str, type[Evaluator]] = {
     "pass_rate": TrialPass,
@@ -109,4 +125,5 @@ GRADERS: dict[str, type[Evaluator]] = {
     "refund_amount_correct": RefundAmountCorrect,
     "db_fact_kept": DbFactKept,
     "reply_matches_ledger": ReplyMatchesLedger,
+    "proposal_amount_correct": ProposalAmountCorrect,
 }
