@@ -1,0 +1,4 @@
+# Eval data must hash the same on Windows and on Linux CI (eval_set_sha in reports).
+*.jsonl text eol=lf
+src/data/eval/*.json text eol=lf
+src/reports/*.json text eol=lf

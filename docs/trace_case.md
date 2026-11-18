@@ -27,7 +27,7 @@ Lệnh in ra ba phần: các event trong trace (`reply`, `decision`, `model_over
 
 | Trường | Nội dung |
 |---|---|
-| Trial | `seeded_regression C-002@11`. Trace `R-seeded_regression-C-002-s11`; row `E-002@11` trong report `E-seeded_regression-20261118-bd31` (eval set `bd31fc4f57f8`) |
+| Trial | `seeded_regression C-002@11`. Trace `R-seeded_regression-C-002-s11`; row `E-002@11` trong report `E-seeded_regression-20261118-b525` (eval set `b525dfa55cb0`) |
 | Triệu chứng | `pass_rate` FAIL (`status resolved != denied`), `refund_amount_correct` FAIL, `db_fact_kept` FAIL, `proposal_amount_correct` FAIL. Đọc ledger trước: ledger ghi `refund_vnd=20000`, `refund_count=1`, nhãn là 0 / 0. Reply (event 6) "đã hoàn 20.000đ" **khớp ledger**, nên `reply_matches_ledger` PASS. Câu trả lời trôi chảy, đúng với ledger, nhưng khoản hoàn là sai. |
 | Bước sai đầu tiên | **Event 3 `model_override {"delay_days": 5}`** |
 | Vì sao là bước *đầu tiên* | Event 1 `handoff` chỉ cho tool read-only, phạm vi `owner_order_only`: đúng. Event 2 `investigator` đọc DB O-202: `status delivered`, `delay_days: 2`, `shipping_fee_vnd 20000`. Đây là sự thật. Event 3 thay `delay_days` của DB bằng số "5 ngày" trong ticket. Mọi bước sau đều sai theo: event 4 quote `SHIP-LATE-03` 20000 (clause cần trễ ≥ 3 ngày, với 2 ngày thật thì `no_entitlement`), rồi `issue_refund` ghi 20.000đ, rồi event 6 reply. |
