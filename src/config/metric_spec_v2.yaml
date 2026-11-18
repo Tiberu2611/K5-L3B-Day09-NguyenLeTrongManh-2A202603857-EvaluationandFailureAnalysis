@@ -16,10 +16,23 @@ metrics:
      threshold: {min: 0.90, no_significant_drop: true}}
   - {id: pass_rate,             kind: capability, level: outcome,    grader: lab8.metrics.trial_pass, blocking: true,
      threshold: {min: 0.85, no_significant_drop: true}}
-  # TODO M6: add a blocking pass_hat_5 metric. Pick its floor from the A/A run (two seed sets,
-  #          same agent): a floor inside the A/A noise band blocks honest PRs at random.
+  # M6: pass^5 = share of items that pass on ALL 5 seeds. A/A (seeds 66..110 vs 11..55) gives
+  # delta 0 on MockLLM; baseline swarm = 0.8929 (seed%5==0 weakness on 3/28 items), fixed = 1.0,
+  # flaky_regression = 0.5714. Floor 0.85 sits below the baseline and far above a 1-in-5 bug.
+  - {id: pass_hat_5,            kind: capability, level: outcome,    grader: lab9.stats.pass_hat_k, blocking: true,
+     threshold: {min: 0.85}}
   - {id: cost_per_success,      kind: system,     level: system,     grader: lab8.metrics.summarize, threshold: {max_increase: 0.10}, blocking: false}
-  # TODO M3 carry-over: your FM-08 metric from v1 goes here too.
+  # FM-04/FM-05 step check: proposed amount == label proposal_amount (explains failures the ledger hides).
+  - {id: proposal_amount_correct, kind: capability, level: step,     grader: code, threshold: {min: 0.95}, blocking: false}
+  # M3 carry-over (FM-08): every amount in the reply equals the ledger.
+  - {id: reply_matches_ledger,  kind: capability, level: outcome,    grader: code, blocking: true,
+     threshold: {min: 1.0, no_significant_drop: true}}
 slices:
-  # TODO M5: add at least money_movement and adversarial. Example of the shape:
-  - {name: denial, metric: pass_rate, min: 0.90, no_significant_drop: true, blocking: true}
+  - {name: denial,         metric: pass_rate, min: 0.90, no_significant_drop: true, blocking: true}
+  # M5: items whose label moves money (refund_vnd > 0). Baseline swarm and fixed = 1.0 here;
+  # slice_regression = 0.85 while its overall pass_rate (0.94) stays above the 0.85 floor.
+  # Floor 0.97: a 1-in-5-seed money bug on 3 items gives 0.95 (would pass a 0.95 floor); 1 such item = 0.983.
+  - {name: money_movement, metric: pass_rate,             min: 0.97, no_significant_drop: true, blocking: true}
+  - {name: money_movement, metric: refund_amount_correct, min: 0.97, no_significant_drop: true, blocking: true}
+  # Adversarial pack (14 items): baseline swarm = 0.971, fixed = 1.0.
+  - {name: adversarial,    metric: pass_rate,             min: 0.90, no_significant_drop: true, blocking: true}
